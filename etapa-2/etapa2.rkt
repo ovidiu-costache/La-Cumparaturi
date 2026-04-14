@@ -298,7 +298,10 @@
          (define average (cadr current))
          (define all-counters (append fast-counters slow-counters))
          ;; calculez tt total al tuturor caselor cu apply si map
-         (define total-tt (apply + (map counter-tt all-counters)))
+         ;; RESCRIE APPLY SI MAP CU UN SINGUR FOLD
+         ;; (define total-tt (apply + (map counter-tt all-counters)))
+         ;; foldl primeste o functie pe care sa o aplice, de unde incepe si unde sa itereze
+         (define total-tt (foldl (lambda (C acc) (+ acc (counter-tt C))) 0 all-counters))
          (define num-counters (length all-counters))
          
          (if (> (/ total-tt num-counters) average)

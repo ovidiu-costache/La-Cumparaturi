@@ -152,6 +152,7 @@
   (if (null? requests)
       (list C1 C2 C3 C4)
       (match (car requests)
+        ;; o casa cu indexul index este intarziata cu minutes minute
         [(list 'delay index minutes)
          (if (= index 1)
              (serve (cdr requests) (tt+ C1 minutes) C2 C3 C4)
@@ -160,6 +161,7 @@
                  (if (= index 3)
                      (serve (cdr requests) C1 C2 (tt+ C3 minutes) C4)
                      (serve (cdr requests) C1 C2 C3 (tt+ C4 minutes)))))]
+        ;; client nou cu numele name si n-items nr de produse
         [(list name n-items)
          (if (<= n-items ITEMS)
              ;; cost mic, poate merge la orice casa

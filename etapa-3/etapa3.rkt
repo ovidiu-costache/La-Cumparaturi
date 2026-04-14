@@ -45,15 +45,20 @@
        counters))
 
 (define tt+
-  ;; ca in etapa 2
+  ;; tt+ primeste nr de minute
   (lambda (minutes)
+    ;; intiarce o noua functie care asteapta o casa C
     (lambda (C)
+      ;; construiesc o casa noua ca cea veche, dar cu tt crescut
       (make-counter (counter-index C) (+ (counter-tt C) minutes) (counter-et C) (counter-queue C)))))
 
 (define et+
-  ;; ca in etapa 2
+  ;; aceeasi logica ca la tt+, dar acum adun minutele la et
+  ;; et+ primeste nr de minute
   (lambda (minutes)
+    ;; intoarce functia care asteapta o casa C
     (lambda (C)
+      ;; construiesc casa noua cu et crescut
       (make-counter (counter-index C) (counter-tt C) (+ (counter-et C) minutes) (counter-queue C)))))
 
 (define ((add-to-counter name items) C) ; testată de checker
@@ -63,28 +68,36 @@
                     (+ (counter-et C) items)
                     (counter-et C))
                 (enqueue (cons name items) (counter-queue C))))                      ; nu modificați signatura!
-    
 
 (define abstract-min-function
-  ;; ca in etapa 2
+  ;; functia abstracta primeste modul in care se va extrage valoarea (counter-tt sau counter-et)
   (lambda (extract-value)
+    ;; returneaza o functie care primeste lista de case
     (lambda (counters)
+      ;; ca sa gasesc minimul dintr o lista voi folosi foldl
+      ;; compar fiecare elem cu minimul de pana atunci
       (foldl
        (lambda (current-counter min-counter)
          (if (< (extract-value current-counter) (extract-value min-counter))
              current-counter
              min-counter))
+       ;; vloarea initiala pt foldl va fi prima casa din lista
        (car counters)
+       ;; lista parcursa va fi restul caselor
        (cdr counters)))))
+
 (define min-tt
-  ;; ca in etapa 2
   (lambda (counters)
+    ;; casa cu tt min
     (define min-tt-counter ((abstract-min-function counter-tt) counters))
+    ;; perechea (index . tt)
     (cons (counter-index min-tt-counter) (counter-tt min-tt-counter))))
+
 (define min-et
-  ;; ca in etapa 2
   (lambda (counters)
-    (define min-et-counter ((abstract-min-function counter-et) counters))
+    ;; casa cu et min
+    (define min-et-counter((abstract-min-function counter-et) counters))
+    ;; perechea
     (cons (counter-index min-et-counter) (counter-et min-et-counter))))
 
 (define (remove-first-from-counter C); testată de checker
